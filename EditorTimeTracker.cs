@@ -17,23 +17,38 @@ public class EditorTimeTracker : EditorWindow
 {
     private static DateTime editorStartTime;
     private static TimeSpan totalEditorTime;
-    private static TimeSpan currenEditorSession;
     private static bool isTracking = false;
     private static string logFilePath = "EditorTimeLog.json";
+    private static string editorStartTimeKey = "EditorTimeTracker_StartTime";
+    private static bool isInitialized = false;
 
     static EditorTimeTracker()
     {
         LoadEditorTime();
-
-        if (!isTracking)
-        {
-            editorStartTime = DateTime.Now;
-            isTracking = true;
-        }
-
+        EditorApplication.update += Initialize;
         EditorApplication.quitting += OnEditorQuit;
 
-        Debug.Log("EditorTimeTracker initialized. Session started at: " + editorStartTime);
+        Debug.Log("EditorTimeTracker initialized.");
+    }
+
+    private static void Initialize()
+    {
+        if (isInitialized) return;
+
+        if (EditorPrefs.HasKey(editorStartTimeKey))
+        {
+            editorStartTime = DateTime.Parse(EditorPrefs.GetString(editorStartTimeKey));
+        }
+        else
+        {
+            editorStartTime = DateTime.Now;
+            EditorPrefs.SetString(editorStartTimeKey, editorStartTime.ToString());
+        }
+
+        isTracking = true;
+        isInitialized = true;
+
+        Debug.Log("EditorTimeTracker session started at: " + editorStartTime);
     }
 
     [MenuItem("Window/Editor Time Tracker")]
@@ -45,11 +60,13 @@ public class EditorTimeTracker : EditorWindow
     private void OnEnable()
     {
         EditorApplication.quitting += OnEditorQuit;
+        EditorApplication.update += UpdateSessionTime;
     }
 
     private void OnDisable()
     {
         EditorApplication.quitting -= OnEditorQuit;
+        EditorApplication.update -= UpdateSessionTime;
     }
 
     private void OnGUI()
@@ -58,14 +75,12 @@ public class EditorTimeTracker : EditorWindow
         GUILayout.Space(5);
         GUILayout.Label("Total Time: " + FormatTimeSpan(totalEditorTime));
         GUILayout.Space(5);
-        GUILayout.Label("Current Session Time: " + FormatTimeSpan(currenEditorSession));
+        GUILayout.Label("Current Session Time: " + FormatTimeSpan(DateTime.Now - editorStartTime));
 
         GUILayout.Space(10);
 
         if (GUILayout.Button("Reload Timer"))
         {
-            currenEditorSession = DateTime.Now - editorStartTime;
-
             Repaint();
         }
     }
@@ -76,6 +91,7 @@ public class EditorTimeTracker : EditorWindow
 
         SaveEditorTime();
 
+        EditorPrefs.DeleteKey(editorStartTimeKey);
         Debug.Log("EditorTimeTracker session ended. Total session time: " + totalEditorTime);
     }
 
@@ -96,6 +112,14 @@ public class EditorTimeTracker : EditorWindow
         else
         {
             totalEditorTime = TimeSpan.Zero;
+        }
+    }
+
+    private static void UpdateSessionTime()
+    {
+        if (isTracking)
+        {
+            EditorPrefs.SetString(editorStartTimeKey, editorStartTime.ToString());
         }
     }
 

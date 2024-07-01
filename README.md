@@ -26,3 +26,8 @@ Here are all Unity version that are currently tested
 Download the Newest Version and check if your current Unity Version does Work with the Time Tracker.
 Import the Time Tracker using Unitys Package Importer, from here the Programm makes the Rest.
 The Time Tracker is going to create a JSON file in the root folder of your Unity Project and is going to log your times in here.
+
+## Current Bugs
+
+## Fixed Bugs
+- On every Reload of the Editor, the Current Editor gets Resetet and starts at 0.

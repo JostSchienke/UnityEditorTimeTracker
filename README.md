@@ -21,3 +21,8 @@ Here are all Unity version that are currently tested
 | `Unity 6000.0.5f1`| `TRUE` | `TRUE` |
 | `Unity 2022.3.12f1` | `TRUE` | `TRUE` |
 | `Unity 2021.3.25f1` | `TRUE` | `TRUE` |
+
+## Installation
+Download the Newest Version and check if your current Unity Version does Work with the Time Tracker.
+Import the Time Tracker using Unitys Package Importer, from here the Programm makes the Rest.
+The Time Tracker is going to create a JSON file in the root folder of your Unity Project and is going to log your times in here.

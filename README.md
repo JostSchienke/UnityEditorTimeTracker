@@ -30,4 +30,4 @@ The Time Tracker is going to create a JSON file in the root folder of your Unity
 ## Current Bugs
 
 ## Fixed Bugs
-- On every Reload of the Editor, the Current Editor gets Resetet and starts at 0.
+- On every Reload of the Editor, the Current Editor gets Resetet and starts at 0. see: [Issue 1](https://github.com/JostSchienke/UnityEditorTimeTracker/issues/1)

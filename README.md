@@ -1,6 +1,6 @@
 # UnityEditorTimeTracker
-This Editor Extension in Unity Tracks your current Session Time as well as the complete time you spent in Unity.
-the Tracked time is saved in a JSON file called EditorTimeLog.json and is saved in the Root folder of your Project
+This editor extension in Unity tracks your current session time as well as the total time you have spent in Unity.
+The tracked time is saved in a JSON file called EditorTimeLog.json which is saved in the Root folder of your Project.
 
 
 ## Authors
@@ -13,7 +13,7 @@ the Tracked time is saved in a JSON file called EditorTimeLog.json and is saved 
 #### Tested Unity version
 
 ```
-Here are all Unity version that are currently tested
+Here are all Unity versions that are currently tested: 
 ```
 
 | Version | Tested     | Works                |
@@ -23,9 +23,9 @@ Here are all Unity version that are currently tested
 | `Unity 2021.3.25f1` | `TRUE` | `TRUE` |
 
 ## Installation
-Download the Newest Version and check if your current Unity Version does Work with the Time Tracker.
-Import the Time Tracker using Unitys Package Importer, from here the Programm makes the Rest.
-The Time Tracker is going to create a JSON file in the root folder of your Unity Project and is going to log your times in here.
+Download the newest version and check if your current version of Unity works with the Time Tracker.
+Import the Time Tracker using Unitys Package Importer, from here the Programm will do the Rest.
+The Time Tracker will create a JSON file in the root folder of your Unity Project and log your times in there. 
 
 ## Current Bugs
 

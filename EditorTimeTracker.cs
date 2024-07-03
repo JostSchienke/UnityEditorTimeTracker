@@ -11,16 +11,20 @@ using UnityEditor;
 using UnityEngine;
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 [InitializeOnLoad]
 public class EditorTimeTracker : EditorWindow
 {
     private static DateTime editorStartTime;
+    private static TimeSpan currentSessionTime;
     private static TimeSpan totalEditorTime;
     private static bool isTracking = false;
     private static string logFilePath = "EditorTimeLog.json";
     private static string editorStartTimeKey = "EditorTimeTracker_StartTime";
     private static bool isInitialized = false;
+
+    private static List<DailyRecord> dailyRecords = new List<DailyRecord>();
 
     static EditorTimeTracker()
     {
@@ -42,7 +46,7 @@ public class EditorTimeTracker : EditorWindow
         else
         {
             editorStartTime = DateTime.Now;
-            EditorPrefs.SetString(editorStartTimeKey, editorStartTime.ToString());
+            EditorPrefs.SetString(editorStartTimeKey, editorStartTime.ToString("o"));
         }
 
         isTracking = true;
@@ -73,31 +77,58 @@ public class EditorTimeTracker : EditorWindow
     {
         GUILayout.Label("Editor Time Tracker", EditorStyles.boldLabel);
         GUILayout.Space(5);
-        GUILayout.Label("Total Time: " + FormatTimeSpan(totalEditorTime));
-        GUILayout.Space(5);
         GUILayout.Label("Current Session Time: " + FormatTimeSpan(DateTime.Now - editorStartTime));
-
+        GUILayout.Label("Total Editor Time: " + FormatTimeSpan(totalEditorTime));
         GUILayout.Space(10);
 
         if (GUILayout.Button("Reload Timer"))
         {
             Repaint();
         }
+
+        GUILayout.Space(10);
+
+        GUILayout.Label("Daily Log:", EditorStyles.boldLabel);
+        foreach (var record in dailyRecords)
+        {
+            GUILayout.Label(record.Date + ": " + FormatTimeSpan(TimeSpan.FromSeconds(record.SessionTime)));
+        }
     }
 
     private static void OnEditorQuit()
     {
-        totalEditorTime += DateTime.Now - editorStartTime;
+        currentSessionTime = DateTime.Now - editorStartTime;
+        totalEditorTime += currentSessionTime;
+
+        var today = DateTime.Today.Date.ToString("dd-MM-yy");
+        var todayRecord = dailyRecords.Find(record => record.Date == today);
+
+        if (todayRecord != null)
+        {
+            todayRecord.SessionTime += currentSessionTime.TotalSeconds;
+        }
+        else
+        {
+            dailyRecords.Add(new DailyRecord { Date = today, SessionTime = currentSessionTime.TotalSeconds });
+        }
 
         SaveEditorTime();
 
+        // Reset editorStartTime to current time
+        editorStartTime = DateTime.Now;
+
         EditorPrefs.DeleteKey(editorStartTimeKey);
-        Debug.Log("EditorTimeTracker session ended. Total session time: " + totalEditorTime);
+        Debug.Log("EditorTimeTracker session ended. Current session time: " + currentSessionTime);
     }
 
     private static void SaveEditorTime()
     {
-        string json = JsonUtility.ToJson(new TimeData { TotalSessionTime = totalEditorTime.TotalSeconds });
+        var timeData = new TimeData
+        {
+            TotalEditorTime = totalEditorTime.TotalSeconds,
+            DailyRecords = dailyRecords
+        };
+        string json = JsonUtility.ToJson(timeData);
         File.WriteAllText(logFilePath, json);
     }
 
@@ -107,7 +138,8 @@ public class EditorTimeTracker : EditorWindow
         {
             string json = File.ReadAllText(logFilePath);
             TimeData data = JsonUtility.FromJson<TimeData>(json);
-            totalEditorTime = TimeSpan.FromSeconds(data.TotalSessionTime);
+            totalEditorTime = TimeSpan.FromSeconds(data.TotalEditorTime);
+            dailyRecords = data.DailyRecords ?? new List<DailyRecord>();
         }
         else
         {
@@ -119,7 +151,7 @@ public class EditorTimeTracker : EditorWindow
     {
         if (isTracking)
         {
-            EditorPrefs.SetString(editorStartTimeKey, editorStartTime.ToString());
+            EditorPrefs.SetString(editorStartTimeKey, editorStartTime.ToString("o"));
         }
     }
 
@@ -134,6 +166,14 @@ public class EditorTimeTracker : EditorWindow
     [Serializable]
     private class TimeData
     {
-        public double TotalSessionTime;
+        public double TotalEditorTime;
+        public List<DailyRecord> DailyRecords;
+    }
+
+    [Serializable]
+    private class DailyRecord
+    {
+        public string Date;
+        public double SessionTime;
     }
 }

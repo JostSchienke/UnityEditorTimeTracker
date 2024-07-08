@@ -23,9 +23,9 @@ Here are all Unity versions that are currently tested:
 | `Unity 2021.3.25f1` | `TRUE` | `TRUE` |
 
 ## Installation
-Download the newest version and check if your current version of Unity works with the Time Tracker.
-Import the Time Tracker using Unitys Package Importer, from here the Programm will do the Rest.
-The Time Tracker will create a JSON file in the root folder of your Unity Project and log your times in there. 
+- Download the newest version and check if your current version of Unity works with the Time Tracker.
+- Import the Time Tracker using Unitys Package Importer, from here the Programm will do the Rest.
+- The Time Tracker will create a JSON file in the root folder of your Unity Project and log your times in there. 
 
 ## Current Bugs
 - Using Unity Network for Gameobjects or the Quantum console resets the Timer when Building the Games

@@ -88,6 +88,16 @@ public class EditorTimeTracker : EditorWindow
 
         GUILayout.Space(10);
 
+        GUILayout.Label("(If you are using Unity Version controll, you should Save before checking in!)");
+
+        if(GUILayout.Button("Save Timer"))
+        {
+            SaveEditorTime();
+            LoadEditorTime();
+        }
+
+        GUILayout.Space(10);
+
         GUILayout.Label("Daily Log:", EditorStyles.boldLabel);
         foreach (var record in dailyRecords)
         {

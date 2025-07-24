@@ -2,8 +2,9 @@
  * This software is provided under the MIT License.
  * 
  * Original Author: Jost Schienke
+ * GitHub: https://github.com/JostSchienke/UnityEditorTimeTracker
  * 
- * Disclaimer: This file has been modified from its original version.
+ * Disclaimer: This file might has been modified from its original version.
  * The original author is not responsible for any changes made to the code.
  */
 
@@ -90,7 +91,7 @@ public class EditorTimeTracker : EditorWindow
 
         GUILayout.Label("(If you are using Unity Version controll, you should Save before checking in!)");
 
-        if(GUILayout.Button("Save Timer"))
+        if (GUILayout.Button("Save Timer"))
         {
             SaveEditorTime();
             LoadEditorTime();

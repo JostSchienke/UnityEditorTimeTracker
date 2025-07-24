@@ -18,6 +18,7 @@ Here are all Unity versions that are currently tested:
 
 | Version | Tested     | Works                |
 | :-------- | :------- | :------------------------- |
+| `Unity 6000.1.11fa` | `TRUE` | `TRUE` |
 | `Unity 6000.0.5f1`| `TRUE` | `TRUE` |
 | `Unity 2022.3.12f1` | `TRUE` | `TRUE` |
 | `Unity 2021.3.25f1` | `TRUE` | `TRUE` |
